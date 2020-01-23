@@ -1,15 +1,26 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Register from '../SignUp/Register';
+import ButtonAppBar from '../NavBar/ButtonAppBar';
 import './App.scss';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <button className="button btn btn-danger">X</button>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  state = {
+    loadComponent: false
+  }
+handleOnClickEvent=()=>{
+  return <Register />
 }
 
+  render (){
+    return (
+      <div className = "App">
+        <ButtonAppBar
+          handleOnClickEvent = {this.handleOnClickEvent()}
+        />
+        {/* <Register /> */}
+      </div>
+    )
+  }
+}
 export default App;
