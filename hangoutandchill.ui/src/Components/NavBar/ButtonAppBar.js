@@ -8,6 +8,9 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Register from '../SignUp/Register';
 
+let stateObj= {
+  loadComponent: false,
+}
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
@@ -20,14 +23,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
+const handleOnClick = () => {
+  stateObj.loadComponent = !(stateObj.loadComponent);
+  console.log(stateObj.loadComponent)
+}
 
 const ButtonAppBar = () => {
   const classes = useStyles();
-  const handleOnClick = (props) => {
-    console.log(props)
-    this.props.handleOnClickEvent();
-  }
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -44,6 +46,7 @@ const ButtonAppBar = () => {
             >Register</Button>
           <Button color="inherit">Login</Button>
         </Toolbar>
+         {!stateObj.loadComponent ? null : <Register />}
       </AppBar>
     </div>
   );
