@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HangOutAndChill", "HangOutAndChill\HangOutAndChill.csproj", "{8FCAF92C-1BF8-469D-8C7B-AF7E82CD9AED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HangOutAndChill", "HangOutAndChill\HangOutAndChill.csproj", "{F12DC41B-778D-4FE7-9842-378651A152E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8FCAF92C-1BF8-469D-8C7B-AF7E82CD9AED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8FCAF92C-1BF8-469D-8C7B-AF7E82CD9AED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8FCAF92C-1BF8-469D-8C7B-AF7E82CD9AED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8FCAF92C-1BF8-469D-8C7B-AF7E82CD9AED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F12DC41B-778D-4FE7-9842-378651A152E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F12DC41B-778D-4FE7-9842-378651A152E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F12DC41B-778D-4FE7-9842-378651A152E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F12DC41B-778D-4FE7-9842-378651A152E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {D50E60C4-A92B-4091-A0D5-5BAC3D95B033}
+		SolutionGuid = {79027EC6-3348-467F-9015-BB7B6A7327B6}
 	EndGlobalSection
 EndGlobal
