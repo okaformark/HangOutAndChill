@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HangOutAndChill.Interfaces;
+using HangOutAndChill.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +28,7 @@ namespace HangOutAndChill
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddScoped<IScheduleAppointment, ScheduleRepository>()
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
