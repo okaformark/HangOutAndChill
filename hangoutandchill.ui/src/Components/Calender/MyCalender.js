@@ -15,32 +15,45 @@ import {
   DragAndDrop,
   Resize,
 } from '@syncfusion/ej2-react-schedule';
+// import { DataManager, UrlAdaptor } from '@syncfusion/ej2-data';
+import getAllSchedules from '../Helpers/ScheduleDataRequest';
 
 class MyCalendar extends React.Component {
-  localData = {
-    dataSource: [
-      {
-        id:1,
-        EndTime: new Date("2020-01-24T12:00:00-07:30"),
-        StartTime: new Date("2020-01-24T12:00:00-06:30"),
-        Subject: 'Meeting',
-        // isAllDay: true,
-        // RecurrenceRule: 'FREQ=DAILY; INTERVAL=1; COUNT=4'
 
-      },
-      {
-        id:2,
-        EndTime: new Date(),
-        StartTime: new Date(),
-        Subject: 'Gym'
-      }
-    ]
+  state = {
+    schedule:[{}]
   }
+
+  getSchedules = () => {
+    getAllSchedules.getAllSchedule()
+      .then(result => {
+        const resp= result;
+        this.setState({schedule: [...resp.result]}, () => {
+          console.error(this.state.schedule, "schedule")
+        })
+      })
+      .catch(err => console.error('cannot load schedules', err))
+  }
+
+  componentDidMount () {
+    this.getSchedules();
+  }
+
+  // dataManager = new DataManager({
+  //   url: 'http://localhost:62528/api/scheduleAppointment', // 'controller/actions'
+  //   crudUrl: 'http://localhost:62528/api/scheduleAppointment',
+  //   adaptor: new UrlAdaptor(),
+  //   crossDomain: true
+  // });
+
+
   render() {
+    const schedules = this.state.schedule;
+
     return (
       <ScheduleComponent 
         currentView='Month'
-        eventSettings={this.localData}
+        eventSettings={{dataSource: schedules}}
         height='550px'
         >
         <ViewsDirective>

@@ -38,7 +38,7 @@ const ButtonAppBar = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            Hangout and Chill
+            {/* Hangout and Chill */}
           </Typography>
           <Button 
             color="inherit"

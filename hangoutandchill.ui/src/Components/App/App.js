@@ -9,15 +9,15 @@ class App extends React.Component {
   state = {
     loadComponent: false
   }
-handleOnClickEvent=()=>{
-  return <Register />
-}
+// handleOnClickEvent=()=>{
+//   return <Register />
+// }
 
   render (){
     return (
       <div className = "App">
         <ButtonAppBar
-          handleOnClickEvent = {this.handleOnClickEvent()}
+          // handleOnClickEvent = {this.handleOnClickEvent()}
         />
         {/* <Register /> */}
         <MyCalendar />
