@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import render from 'react-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -8,9 +9,6 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Register from '../SignUp/Register';
 
-let stateObj= {
-  loadComponent: false,
-}
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
@@ -23,13 +21,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const handleOnClick = () => {
-  stateObj.loadComponent = !(stateObj.loadComponent);
-  console.log(stateObj.loadComponent)
-}
-
 const ButtonAppBar = () => {
+  const [isRegister, setRegister] = useState(false);
   const classes = useStyles();
+   const handleOnClick = () => {
+    setRegister(true);
+  }
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -38,15 +35,18 @@ const ButtonAppBar = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            {/* Hangout and Chill */}
+            Hangout and Chill
           </Typography>
           <Button 
             color="inherit"
-            onClick = {handleOnClick}
+            onClick={handleOnClick}
             >Register</Button>
+            {isRegister ?
+            <Register />
+            : null
+            }
           <Button color="inherit">Login</Button>
         </Toolbar>
-         {!stateObj.loadComponent ? null : <Register />}
       </AppBar>
     </div>
   );

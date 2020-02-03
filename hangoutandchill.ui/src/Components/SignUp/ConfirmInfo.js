@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import AppBar from '@material-ui/core/AppBar';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { ThemeProvider as MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { List, ListItem, ListItemText } from '@material-ui/core/';
 import Button from '@material-ui/core/Button';
 
+
+const theme = createMuiTheme();
 export class Confirm extends Component {
   continue = e => {
     e.preventDefault();
@@ -34,7 +36,7 @@ export class Confirm extends Component {
         country
     }} = this.props;
     return (
-      <MuiThemeProvider >
+      <MuiThemeProvider theme={theme}>
         <React.Fragment>
           <Dialog
             open={true}

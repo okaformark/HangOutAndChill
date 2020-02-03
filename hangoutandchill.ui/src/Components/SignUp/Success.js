@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import AppBar from '@material-ui/core/AppBar';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { ThemeProvider as MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
+
+const theme = createMuiTheme();
 export class Success extends Component {
   continue = e => {
     e.preventDefault();
@@ -17,7 +19,7 @@ export class Success extends Component {
 
   render() {
     return (
-      <MuiThemeProvider > 
+      <MuiThemeProvider theme={theme} > 
         <React.Fragment>
         <Dialog 
             open={true}
