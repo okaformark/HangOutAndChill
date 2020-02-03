@@ -54,6 +54,15 @@ class UserOtherInfo extends Component {
                         />
                         <br />
                         <TextField
+                            placeholder="Enter your city"
+                            label="state"
+                            onChange ={handleChange('city')}
+                            defaultValue={inputs.city}
+                            margin="normal"
+                            fullWidth={true}
+                        />
+                        <br />
+                        <TextField
                             placeholder="Enter Zipcode"
                             label="Zipcode"
                             onChange ={handleChange('zipCode')}

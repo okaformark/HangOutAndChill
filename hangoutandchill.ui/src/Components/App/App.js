@@ -19,8 +19,8 @@ class App extends React.Component {
         <ButtonAppBar
           // handleOnClickEvent = {this.handleOnClickEvent()}
         />
-        {/* <Register /> */}
-        <MyCalendar />
+        <Register />
+        {/* <MyCalendar /> */}
       </div>
     )
   }
