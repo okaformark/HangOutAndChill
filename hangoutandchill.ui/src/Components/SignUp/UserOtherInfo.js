@@ -5,6 +5,15 @@ import Countries from './Countries';
 
 const theme = createMuiTheme();
 class UserOtherInfo extends Component {
+    state = {
+        countryData: ''
+    }
+
+    getCountryData = (countryInput) => {
+        this.setState({countryData: countryInput },()=>{
+            console.log(this.state.countryData)
+        })
+    }
     continue = e => {
         e.preventDefault();
         this.props.nextStep();
@@ -55,7 +64,7 @@ class UserOtherInfo extends Component {
                         <br />
                         <TextField
                             placeholder="Enter your city"
-                            label="state"
+                            label="city"
                             onChange ={handleChange('city')}
                             defaultValue={inputs.city}
                             margin="normal"
@@ -71,7 +80,8 @@ class UserOtherInfo extends Component {
                             fullWidth={true}
                         />
                         <br />
-                        <Countries />
+                        <Countries
+                         />
                         <br />
                         <Button
                             className="col"
