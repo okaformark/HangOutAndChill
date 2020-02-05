@@ -4,6 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import { ThemeProvider as MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { List, ListItem, ListItemText } from '@material-ui/core/';
 import Button from '@material-ui/core/Button';
+import Auth from '../Auth/Auth'
 
 
 const theme = createMuiTheme();
@@ -12,6 +13,10 @@ export class Confirm extends Component {
     e.preventDefault();
     // PROCESS FORM //
     this.props.nextStep();
+    Auth.registerUser(this.props.inputs)
+      .then((response) =>{
+        console.log(response,"yay")
+      })
   };
 
   back = e => {

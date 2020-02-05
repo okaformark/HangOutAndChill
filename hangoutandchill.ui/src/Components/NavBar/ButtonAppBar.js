@@ -7,6 +7,10 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Register from '../SignUp/Register';
+import SignUp from '../SignUp/SignUp';
+import { NavLink as RRNavLink } from 'react-router-dom';
+
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,12 +23,16 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
 }));
-
+// {isRegister ?
+//   <Register />
+//   : null
+//   }
 const ButtonAppBar = () => {
   const [isRegister, setRegister] = useState(false);
   const classes = useStyles();
    const handleOnClick = () => {
     setRegister(true);
+    return <SignUp />
   }
   return (
     <div className={classes.root}>
@@ -36,14 +44,16 @@ const ButtonAppBar = () => {
           <Typography variant="h6" className={classes.title}>
             Hangout and Chill
           </Typography>
-          <Button 
-            color="inherit"
-            onClick={handleOnClick}
-            >Register</Button>
-            {isRegister ?
-            <Register />
-            : null
-            }
+          {/* <NavLink tag={RRNavLink} to='/SignUp'> */}
+            <Button 
+              tag={RRNavLink}
+              to='/SignUp'
+              color="inherit"
+              onClick={handleOnClick}
+              >SignUp
+            </Button>
+          {/* </NavLink> */}
+            
           <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>

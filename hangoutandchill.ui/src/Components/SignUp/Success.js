@@ -27,8 +27,8 @@ export class Success extends Component {
             maxWidth='sm'
           >
             <AppBar title="Success" />
-            <h1>Thank You For Your Submission</h1>
-            <p>You will get an email with further instructions</p>
+            <h1>Thank You For Your Registering</h1>
+            <p>Log in to continue</p>
           </Dialog>
         </React.Fragment>
       </MuiThemeProvider>
