@@ -42,7 +42,7 @@ class MyCalendar extends React.Component {
   dataManager = new DataManager({
     url: 'http://localhost:62528/api/scheduleAppointment', // 'controller/actions'
     crudUrl: 'http://localhost:62528/api/scheduleAppointment',
-    adaptor: new UrlAdaptor(),
+    adaptor: new UrlAdaptor({headers:[{authentication:"bearer " + sessionStorage.getItem('token')}]}),
     crossDomain: true,
   });
 

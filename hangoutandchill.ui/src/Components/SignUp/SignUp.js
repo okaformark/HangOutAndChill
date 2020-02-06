@@ -21,17 +21,17 @@ export class SignUp extends Component {
           e.preventDefault();
         Auth.registerUser(user)
             .then(() =>{
-                console.log(user,"pop");
                 const userObject = {
                     firstName: user.firstName,
                     lastName: user.lastName,
                     email: user.email,
                     firebaseUid: firebase.auth().currentUser.uid
                 }
+                console.log(userObject,"pop");
                 userData.addUserToDatabase(userObject)
                 .then(() => {
-                    userData.getUser(user.firebaseUid)
-                        .then((response) => { console.log(response);})
+                    userData.getUser(userObject.firebaseUid)
+                        .then((response) => { console.log(response,"rrr");})
                 })
             })
       };
