@@ -15,8 +15,29 @@ namespace HangOutAndChill.Repositories
         string _connectionString = "Server=localhost;Database=testing;Trusted_Connection=True;";
         public bool AddSchedule(AddScheduleDTO addSchedule)
         {
-            throw new NotImplementedException();
+            using var db = new SqlConnection(_connectionString);
+            var sql = @"INSERT INTO [dbo].[Schedule]
+                           (
+                            [UserId]
+                           ,[Status]
+                           ,[Subject]
+                           ,[Description]
+                           ,[StartTime]
+                           ,[EndTime]
+                           ,[Location])
+                     VALUES
+                           (
+                           @UserId
+                           , @Status
+                           , @Subject
+                           , @Description
+                           , @StartTime
+                           , @EndTime
+                           , @Location)";
+
+            return db.Execute(sql, addSchedule) == 1;
         }
+
 
         public bool DeleteSchedule(Guid userId)
         {
@@ -26,15 +47,28 @@ namespace HangOutAndChill.Repositories
         public IEnumerable<ScheduleAppointment> GetSchedule()
         {
             using var db = new SqlConnection(_connectionString);
-            var sql = " select * from Schedule";
+            var sql = @"select * from Schedule";
 
             var schedules = db.Query<ScheduleAppointment>(sql);
             return schedules;
         }
 
-        public bool UpdateSchedule(Guid scheduleId, ScheduleAppointment updatedSchedule)
+        public bool UpdateSchedule(Guid scheduleId, AddScheduleDTO updatedSchedule)
         {
-            throw new NotImplementedException();
+            using var db = new SqlConnection(_connectionString);
+            var sql = @"UPDATE [dbo].[Schedule]
+                   SET
+                      [UserId] = @UserId
+                      ,[Status] = @Status
+                      ,[Subject] = @Subject
+                      ,[Description] = @Description
+                      ,[StartTime] = @StartTime
+                      ,[EndTime] = @EndTime
+                      ,[Location] = @Location
+                 WHERE Id = @Id";
+            updatedSchedule.Id = scheduleId;
+            return db.Execute(sql, updatedSchedule) == 1;
+
         }
     }
 }

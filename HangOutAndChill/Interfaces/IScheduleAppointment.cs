@@ -11,7 +11,8 @@ namespace HangOutAndChill.Interfaces
     {
         IEnumerable<ScheduleAppointment> GetSchedule();
         bool AddSchedule(AddScheduleDTO addSchedule);
-        bool UpdateSchedule(Guid scheduleId, ScheduleAppointment updatedSchedule);
+        //bool UpdateSchedule(Guid scheduleId, ScheduleAppointment updatedSchedule);
         bool DeleteSchedule(Guid userId);
+        bool UpdateSchedule(Guid id, AddScheduleDTO appointment);
     }
 }

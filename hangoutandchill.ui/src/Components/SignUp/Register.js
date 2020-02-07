@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import UserOtherInfo from './UserOtherInfo';
 import UserPersonalInfo from './UserPersonalInfo';
-
+import ConfirmInfo from './ConfirmInfo';
+import Success from './Success';
 
 class Register extends Component {
     state = {
@@ -48,6 +49,7 @@ class Register extends Component {
             dateOfBirth,
             address,
             aptOrUnit,
+            city,
             state,
             zipCode,
             country
@@ -64,6 +66,7 @@ class Register extends Component {
             dateOfBirth,
             address,
             aptOrUnit,
+            city,
             state,
             zipCode,
             country
@@ -87,17 +90,18 @@ class Register extends Component {
                         inputs = {inputs}
                     />
                 )
-            // case 3:
-            //     return (
-            //         <ConfirmInfo
-            //             nextStep = {this.nextStep}
-            //             prevStep = {this.prevStep}
-            //         />
-            //     )
-            // case 4:
-            //     return (
-            //         <Success/>
-            //     )
+            case 3:
+                return (
+                    <ConfirmInfo
+                        nextStep = {this.nextStep}
+                        prevStep = {this.prevStep}
+                        inputs = {inputs}
+                    />
+                )
+            case 4:
+                return (
+                    <Success/>
+                )
 
             default:
                 return(

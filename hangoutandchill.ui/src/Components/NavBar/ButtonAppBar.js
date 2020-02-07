@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -7,10 +7,11 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Register from '../SignUp/Register';
+import SignUp from '../SignUp/SignUp';
+import { NavLink as RRNavLink } from 'react-router-dom';
 
-let stateObj= {
-  loadComponent: false,
-}
+
+
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
@@ -22,14 +23,17 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
 }));
-
-const handleOnClick = () => {
-  stateObj.loadComponent = !(stateObj.loadComponent);
-  console.log(stateObj.loadComponent)
-}
-
+// {isRegister ?
+//   <Register />
+//   : null
+//   }
 const ButtonAppBar = () => {
+  const [isRegister, setRegister] = useState(false);
   const classes = useStyles();
+   const handleOnClick = () => {
+    setRegister(true);
+    return <SignUp />
+  }
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -38,15 +42,20 @@ const ButtonAppBar = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            {/* Hangout and Chill */}
+            Hangout and Chill
           </Typography>
-          <Button 
-            color="inherit"
-            onClick = {handleOnClick}
-            >Register</Button>
+          {/* <NavLink tag={RRNavLink} to='/SignUp'> */}
+            <Button 
+              tag={RRNavLink}
+              to='/SignUp'
+              color="inherit"
+              onClick={handleOnClick}
+              >SignUp
+            </Button>
+          {/* </NavLink> */}
+            
           <Button color="inherit">Login</Button>
         </Toolbar>
-         {!stateObj.loadComponent ? null : <Register />}
       </AppBar>
     </div>
   );

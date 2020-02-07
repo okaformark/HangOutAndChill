@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import React from 'react';
+import React, {useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles } from '@material-ui/core/styles';
@@ -24,7 +24,8 @@ const useStyles = makeStyles({
 
 export default function CountrySelect() {
   const classes = useStyles();
-
+   const [input, setInput] = useState();
+   
   return (
     <Autocomplete
       id="country-select-demo"
@@ -46,11 +47,12 @@ export default function CountrySelect() {
           {...params}
           label="Choose a country"
           variant="outlined"
-          fullWidth
+          fullWidth={true}
           inputProps={{
             ...params.inputProps,
             autoComplete: 'new-password', // disable autocomplete and autofill
           }}
+          onChange={(e) => setInput(input, e.target.value)}
         />
       )}
     />

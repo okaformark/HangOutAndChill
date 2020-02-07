@@ -15,7 +15,7 @@ import {
   DragAndDrop,
   Resize,
 } from '@syncfusion/ej2-react-schedule';
-// import { DataManager, UrlAdaptor } from '@syncfusion/ej2-data';
+ import { DataManager, UrlAdaptor } from '@syncfusion/ej2-data';
 import getAllSchedules from '../Helpers/ScheduleDataRequest';
 
 class MyCalendar extends React.Component {
@@ -24,27 +24,27 @@ class MyCalendar extends React.Component {
     schedule:[{}]
   }
 
-  getSchedules = () => {
-    getAllSchedules.getAllSchedule()
-      .then(result => {
-        const resp= result;
-        this.setState({schedule: [...resp.result]}, () => {
-          console.error(this.state.schedule, "schedule")
-        })
-      })
-      .catch(err => console.error('cannot load schedules', err))
-  }
+  // getSchedules = () => {
+  //   getAllSchedules.getAllSchedule()
+  //     .then(result => {
+  //       const resp= result;
+  //       this.setState({schedule: [...resp.result]}, () => {
+  //         console.error(this.state.schedule, "schedule")
+  //       })
+  //     })
+  //     .catch(err => console.error('cannot load schedules', err))
+  // }
 
-  componentDidMount () {
-    this.getSchedules();
-  }
+  // componentDidMount () {
+  //   this.getSchedules();
+  // }
 
-  // dataManager = new DataManager({
-  //   url: 'http://localhost:62528/api/scheduleAppointment', // 'controller/actions'
-  //   crudUrl: 'http://localhost:62528/api/scheduleAppointment',
-  //   adaptor: new UrlAdaptor(),
-  //   crossDomain: true
-  // });
+  dataManager = new DataManager({
+    url: 'http://localhost:62528/api/scheduleAppointment', // 'controller/actions'
+    crudUrl: 'http://localhost:62528/api/scheduleAppointment',
+    adaptor: new UrlAdaptor({headers:[{authentication:"bearer " + sessionStorage.getItem('token')}]}),
+    crossDomain: true,
+  });
 
 
   render() {
@@ -53,8 +53,8 @@ class MyCalendar extends React.Component {
     return (
       <ScheduleComponent 
         currentView='Month'
-        eventSettings={{dataSource: schedules}}
-        height='550px'
+        eventSettings={{dataSource: this.dataManager}}
+        height= 'auto'
         >
         <ViewsDirective>
           <ViewDirective option='Day'></ViewDirective>
