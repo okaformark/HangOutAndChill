@@ -65,7 +65,7 @@ class App extends React.Component {
           <ButtonAppBar
           />
          <Home />
-         <SignUp />
+         {/* <SignUp /> */}
           <>
           <div className="Container">
             <Switch>

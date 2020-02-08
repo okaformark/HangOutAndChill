@@ -47,9 +47,9 @@ class MyCalendar extends React.Component {
     IsReadonly: true
   });
 
-  eventTemplate = (props) => {
-  return (<div className="template-wrap">{props.Subject}</div>)
-  }
+  // eventTemplate = (props) => {
+  // return (<div className="template-wrap">{props.Subject}</div>)
+  // }
 
   render() {
     const schedules = this.state.schedule;
@@ -57,7 +57,7 @@ class MyCalendar extends React.Component {
     return (
       <ScheduleComponent 
         currentView='Month'
-        eventSettings={{dataSource: this.dataManager, template:this.eventTemplate}}
+        eventSettings={{dataSource: this.dataManager}}
         height= 'auto'
         >
         <ViewsDirective>

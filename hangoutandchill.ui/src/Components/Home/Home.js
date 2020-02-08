@@ -1,18 +1,4 @@
-// import React, { Component } from 'react'
-// import MyCalender from '../Calender/MyCalender'
-// class Home extends Component {
-//     render() {
-//         return (
-//             <div className="Home">
-
-//                 <MyCalender />
-//             </div>
-//         )
-//     }
-// }
-
-// export default Home
-import React from 'react';
+import React, {useState} from 'react';
 import MyCalender from '../Calender/MyCalender';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -30,9 +16,10 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import EventIcon from '@material-ui/icons/Event';
+import PeopleAltOutlinedIcon from '@material-ui/icons/PeopleAltOutlined';
 import Friends from '../Friends/Friends';
+import MyCalendar from '../Calender/MyCalender';
 
 const drawerWidth = 240;
 
@@ -96,7 +83,9 @@ export default function PersistentDrawerLeft() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-
+  const [friend, setFriend] = useState(false);
+  const [schedule, setSchedule] = useState(false);
+ 
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -104,9 +93,14 @@ export default function PersistentDrawerLeft() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const check = () => {
-    console.log("yaaaay")
+  const loadScheduleComponent = () => {
+       setSchedule(!schedule)
+
   };
+
+  const loadFriendComponent = () => {
+       setFriend(!friend);
+  }
 
   return (
     <div className={classes.root}>
@@ -128,7 +122,7 @@ export default function PersistentDrawerLeft() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            HangOutAndChill
+            Frienduler
           </Typography>
         </Toolbar>
       </AppBar>
@@ -148,18 +142,19 @@ export default function PersistentDrawerLeft() {
         </div>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text} onClick={check}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+          {['Friends'].map((text, index) => (
+            <ListItem button key={text} onClick={loadFriendComponent} >
+              <ListItemIcon><PeopleAltOutlinedIcon/></ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
           ))}
         </List>
-        <Divider />
+        {/* <Divider /> */}
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+          {['Schedule'].map((text, index) => (
+            <ListItem button key={text} onClick={loadScheduleComponent} >
+              <ListItemIcon><EventIcon/></ListItemIcon> 
+              {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
               <ListItemText primary={text} />
             </ListItem>
           ))}
@@ -171,9 +166,23 @@ export default function PersistentDrawerLeft() {
         })}
       >
         <div className={classes.drawerHeader} />
-        <MyCalender />
-        <Friends />
       </main>
+      <br />
+    <div className="container">
+        <div className="col-6">
+            <div className="Friends">
+                {friend ? 
+                <Friends/> : 
+            <div></div>}
+
+        <br />
+        <br />
+            <div className="MyCalendar">
+            {schedule ? <MyCalendar /> : <div></div>}
+            </div>
+      </div>
+    </div>
+    </div>
     </div>
   );
 }
