@@ -1,107 +1,155 @@
-import React, { Component } from 'react'
-import { Dialog, AppBar, TextField, Button} from '@material-ui/core';
-import { ThemeProvider as MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+// import React, { Component } from 'react'
+// import { AppBar, TextField, StylesProvider } from '@material-ui/core';
+// import { ThemeProvider as MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+// import RaisedButton from '@material-ui/core/RaisedButton'
+// import Countries from './Countries';
+import React, {Component}from 'react';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 import Countries from './Countries';
 
-const theme = createMuiTheme();
-class UserOtherInfo extends Component {
-    state = {
-        countryData: ''
-    }
+const useStyles = makeStyles(theme => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
 
-    getCountryData = (countryInput) => {
-        this.setState({countryData: countryInput },()=>{
-            console.log(this.state.countryData)
-        })
-    }
-    continue = e => {
-        e.preventDefault();
-        this.props.nextStep();
-    };
+const  UserOtherInfo = (props) => {
+    const classes = useStyles();
 
-    back = e => {
-        e.preventDefault();
-        this.props.prevStep();
-    };
+    // const proceed = (e, props) => {
+    //     e.preventDefault();
+    //     props.nextStep();
+    // };
 
-    render() {
-        const { inputs, handleChange } = this.props;
-        return (
-            <MuiThemeProvider theme={theme}>
-                <React.Fragment>
-                    <Dialog
-                        open={true}
-                        fullWidth={true}
-                        maxWidth="sm"
-                    >
-                        <AppBar title="We need more information"/>
-                        <TextField
-                            placeholder="Enter your address"
-                            label="Address"
-                            onChange ={handleChange('address')}
-                            defaultValue={inputs.address}
-                            margin="normal"
-                            fullWidth={true}
-                        />
-                        <br />
-                        <TextField
-                            placeholder="Apt or unit number"
-                            label="Apt/Unit"
-                            onChange ={handleChange('aptOrUnit')}
-                            defaultValue={inputs.middleName}
-                            margin="normal"
-                            fullWidth={true}
-                        />
-                        <br />
-                        <TextField
-                            placeholder="Enter your state"
-                            label="state"
-                            onChange ={handleChange('state')}
-                            defaultValue={inputs.state}
-                            margin="normal"
-                            fullWidth={true}
-                        />
-                        <br />
-                        <TextField
-                            placeholder="Enter your city"
-                            label="city"
-                            onChange ={handleChange('city')}
-                            defaultValue={inputs.city}
-                            margin="normal"
-                            fullWidth={true}
-                        />
-                        <br />
-                        <TextField
-                            placeholder="Enter Zipcode"
-                            label="Zipcode"
-                            onChange ={handleChange('zipCode')}
-                            defaultValue={inputs.zipCode}
-                            margin="normal"
-                            fullWidth={true}
-                        />
-                        <br />
-                        <Countries
-                         />
-                        <br />
-                        <Button
-                            className="col"
-                            color="secondary"
-                            variant="contained"
-                            onClick={this.back}
-                            >Previous</Button>
-                        <Button
-                            className="col"
-                            color="primary"
-                            variant="contained"
-                            onClick={this.continue}
-                        >
-                            Next
-                        </Button>
-                    </Dialog>
-                </React.Fragment>    
-            </MuiThemeProvider>
+    // const back = (e, props) => {
+    //     e.preventDefault();
+    //     props.prevStep();
+    // };
+return (
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          We need more Info
+        </Typography>
+        <form className={classes.form} noValidate>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="Address"
+            label="Address"
+            name="address"
+            autoComplete="address"
+            onChange ={props.handleChange('address')}
+            defaultValue={props.inputs.address}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="aptOrUnit"
+            label="AptOrUnit"
+            id="aptOrUnit"
+            autoComplete="aptOrUnit"
+            onChange ={props.handleChange('aptOrUnit')}
+            defaultValue={props.inputs.aptOrUnit}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="city"
+            label="City"
+            id="city"
+            autoComplete="city"
+            onChange ={props.handleChange('city')}
+            defaultValue={props.inputs.city}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="state"
+            label="State"
+            id="state"
+            autoComplete="state"
+            onChange ={props.handleChange('state')}
+            defaultValue={props.inputs.state}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="zipCode  "
+            label="ZipCode"
+            id="zipCode"
+            autoComplete="zipCode"
+            onChange ={props.handleChange('zipCode')}
+            defaultValue={props.inputs.zipCode}
+          />
+          <Countries />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={props.prevStep}
+          >
+            Previous
+          </Button>
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={props.nextStep}
+          >
+            Next
+          </Button>
+        </form>
+      </div>
+      <Box mt={8}>
+      </Box>
+    </Container>
         )
-    }
 }
 
 export default UserOtherInfo;

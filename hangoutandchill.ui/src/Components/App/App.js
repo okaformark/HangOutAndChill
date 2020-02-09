@@ -64,6 +64,7 @@ class App extends React.Component {
         <BrowserRouter>
           <ButtonAppBar
           />
+          <Register />
          {/* <Home /> */}
          {/* <SignUp /> */}
           <>
