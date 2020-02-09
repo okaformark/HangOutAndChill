@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import MyCalender from '../Calender/MyCalender';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -18,6 +17,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import EventIcon from '@material-ui/icons/Event';
 import PeopleAltOutlinedIcon from '@material-ui/icons/PeopleAltOutlined';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import Friends from '../Friends/Friends';
 import MyCalendar from '../Calender/MyCalender';
 
@@ -94,12 +94,14 @@ export default function PersistentDrawerLeft() {
     setOpen(false);
   };
   const loadScheduleComponent = () => {
-       setSchedule(!schedule)
+        setSchedule(!schedule)
+        setFriend(false);
 
   };
 
   const loadFriendComponent = () => {
-       setFriend(!friend);
+        setFriend(!friend);
+       setSchedule(false);
   }
 
   return (
@@ -142,7 +144,16 @@ export default function PersistentDrawerLeft() {
         </div>
         <Divider />
         <List>
-          {['Friends'].map((text, index) => (
+          {['Profile'].map((text) => (
+            <ListItem button key={text} >
+              <ListItemIcon><AccountBoxIcon/></ListItemIcon> 
+              {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+        </List>
+        <List>
+          {['Friends'].map((text) => (
             <ListItem button key={text} onClick={loadFriendComponent} >
               <ListItemIcon><PeopleAltOutlinedIcon/></ListItemIcon>
               <ListItemText primary={text} />
@@ -151,7 +162,7 @@ export default function PersistentDrawerLeft() {
         </List>
         {/* <Divider /> */}
         <List>
-          {['Schedule'].map((text, index) => (
+          {['Schedule'].map((text) => (
             <ListItem button key={text} onClick={loadScheduleComponent} >
               <ListItemIcon><EventIcon/></ListItemIcon> 
               {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
@@ -172,7 +183,7 @@ export default function PersistentDrawerLeft() {
         <div className="col-6">
             <div className="Friends">
                 {friend ? 
-                <Friends/> : 
+                <Friends /> : 
             <div></div>}
 
         <br />

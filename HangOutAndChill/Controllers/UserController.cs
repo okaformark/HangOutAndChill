@@ -31,11 +31,11 @@ namespace HangOutAndChill.Controllers
         }
 
         // GET: api/User/5
-        [Authorize]
-        [HttpGet("{UserFirebaseId}", Name = "GetSingleUser")]
-        public User GetLoggedInUser()
+        //[Authorize]
+        [HttpGet("{UserFirebaseId}")]
+        public User GetLoggedInUser(string UserFirebaseId)
         {
-            return _repo.GetAllUsers().FirstOrDefault(user => user.FirebaseUid == base.UserFirebaseId );
+            return _repo.GetAllUsers().FirstOrDefault(user => user.FirebaseUid == UserFirebaseId );
         }
 
         // POST: api/User

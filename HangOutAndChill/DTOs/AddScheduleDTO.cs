@@ -17,5 +17,6 @@ namespace HangOutAndChill.DTOs
         public DateTime EndTime { get; set; }
         public string Location { get; set; }
         public User UserFirebaseId { get; set; }
+        public bool isReadonly { get; set; }
     }
 }

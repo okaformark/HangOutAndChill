@@ -41,7 +41,11 @@ namespace HangOutAndChill.Repositories
 
         public bool DeleteSchedule(Guid userId)
         {
-            throw new NotImplementedException();
+            using var db = new SqlConnection(_connectionString);
+            var sql = @"DELETE FROM [dbo].[Schedule]
+                            WHERE Id = @userId";
+
+            return db.Execute(sql, new { userId }) == 1;
         }
 
         public IEnumerable<ScheduleAppointment> GetSchedule()

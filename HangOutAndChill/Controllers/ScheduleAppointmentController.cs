@@ -26,7 +26,7 @@ namespace HangOutAndChill.Controllers
        [HttpGet]
         public IActionResult Get()
         {
-            var schedules = _repo.GetSchedule().Select(s => new ScheduleEventData(s.Id, s.StartTime, s.EndTime, s.Subject));
+            var schedules = _repo.GetSchedule().Select(s => new ScheduleEventData(s.Id, s.StartTime, s.EndTime, s.Subject) { IsReadonly = s.Id != Guid.Parse("D3D44C7B-EA96-4D80-A630-20CFF9E0D581") });
 
 
             return Ok(new { result = schedules, count = schedules.Count() });
@@ -55,7 +55,8 @@ namespace HangOutAndChill.Controllers
                     Subject = value.Subject,
                     Location = value.Location,
                     Description = value.Description,
-                    UserFirebaseId = value.UserFirebaseId
+                    UserFirebaseId = value.UserFirebaseId,
+                    isReadonly = true
                 };
 
                 _repo.AddSchedule(appointment);
@@ -80,27 +81,29 @@ namespace HangOutAndChill.Controllers
                 _repo.UpdateSchedule(value.Id, appointment);
 
             }
-            //    if (param.Action == "remove" || (param.Action == "batch" && param.Deleted.Count()>0)) // this block of code will execute while removing the appointment
-            //    {
-            //        if (param.Action == "remove")
-            //        {
-            //            int key = Convert.ToInt32(param.Key);
-            //            ScheduleEventData appointment = db.ScheduleEventDatas.Where(c => c.Id == key).FirstOrDefault();
-            //            if (appointment != null) db.ScheduleEventDatas.DeleteOnSubmit(appointment);
-            //        }
-            //        else
-            //        {
-            //            foreach (var apps in param.Deleted)
-            //            {
-            //                ScheduleEventData appointment = db.ScheduleEventDatas.Where(c => c.Id == apps.Id).FirstOrDefault();
-            //                if (apps != null) db.ScheduleEventDatas.DeleteOnSubmit(appointment);
-            //            }
-            //        }
-            //        db.SubmitChanges();
-            //    }
-            //    var data = db.ScheduleEventDatas.ToList();
-            //    return Json(data, JsonRequestBehavior.AllowGet);
-            return Ok(_repo.GetSchedule().Select(s => new ScheduleEventData(s.Id, s.StartTime, s.EndTime, s.Subject)));
+            if (param.Action == "remove" || (param.Action == "batch" && param.Deleted.Count() > 0)) // this block of code will execute while removing the appointment
+            {
+                //if (param.Action == "remove")
+                //{
+                //    int key = Convert.ToInt32(param.Key);
+                //    ScheduleEventData appointment = db.ScheduleEventDatas.Where(c => c.Id == key).FirstOrDefault();
+                //    if (appointment != null) db.ScheduleEventDatas.DeleteOnSubmit(appointment);
+                //}
+                //else
+                //{
+                //    foreach (var apps in param.Deleted)
+                //    {
+                //        ScheduleEventData appointment = db.ScheduleEventDatas.Where(c => c.Id == apps.Id).FirstOrDefault();
+                //        if (apps != null) db.ScheduleEventDatas.DeleteOnSubmit(appointment);
+                //    }
+                //}
+                //db.SubmitChanges();
+                var value = (param.Action == "remove") ? param.Value : param.Deleted[0];
+                _repo.DeleteSchedule(value.Id);
+            }
+            //var data = db.ScheduleEventDatas.ToList();
+            //return Json(data, JsonRequestBehavior.AllowGet);
+            return Ok(_repo.GetSchedule().Select(s => new ScheduleEventData(s.Id, s.StartTime, s.EndTime, s.Subject) { IsReadonly = s.UserId != Guid.Parse("D3D44C7B-EA96-4D80-A630-20CFF9E0D581") }));
         }
 
         public class EditParams
@@ -111,6 +114,7 @@ namespace HangOutAndChill.Controllers
             public List<ScheduleEventData> Changed { get; set; }
             public List<ScheduleEventData> Deleted { get; set; }
             public ScheduleEventData Value { get; set; }
+            public bool IsReadonly { get; set; }
         }
 
         // POST: api/ScheduleAppointment
@@ -135,17 +139,14 @@ namespace HangOutAndChill.Controllers
     public class ScheduleEventData
     {
 
-        [JsonProperty("Id")]
         public Guid Id { get; set; }
-        [JsonProperty("StartTime")]
         public DateTime StartTime { get; set; }
-        [JsonProperty("EndTime")]
         public DateTime EndTime { get; set; }
-        [JsonProperty("Subject")]
         public string Subject { get; set; }
         public string Location { get; set; }
         public string Description { get; set; }
         public bool IsAllDay { get; set; }
+        public bool IsReadonly { get; set; }
         public object StartTimezone { get; set; }
         public object EndTimezone { get; set; }
         public User UserFirebaseId { get; set; }

@@ -54,9 +54,9 @@ class App extends React.Component {
     this.removeListener();
   }
 
-  // getUser = (tempUser) => {
-  //   this.setState({User: tempUser})
-  // }
+  getUser = ({...tempUser}) => {
+    this.setState({User: tempUser});
+  }
   render (){
     const { authed } = this.state;
     return (
@@ -64,7 +64,7 @@ class App extends React.Component {
         <BrowserRouter>
           <ButtonAppBar
           />
-         <Home />
+         {/* <Home /> */}
          {/* <SignUp /> */}
           <>
           <div className="Container">
@@ -77,7 +77,7 @@ class App extends React.Component {
                 path='/SignUp'
                 authed={authed}
                 component={SignUp}
-                // getUser={this.getUser}
+                getUser={this.getUser}
               />
               <PublicRoute 
                 path='/Login'
