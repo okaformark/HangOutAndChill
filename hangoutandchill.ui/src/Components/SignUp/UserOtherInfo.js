@@ -124,7 +124,7 @@ return (
           />
           <Countries />
           <Button
-            type="submit"
+            // type="submit"
             fullWidth
             variant="contained"
             color="primary"
@@ -135,7 +135,7 @@ return (
           </Button>
 
           <Button
-            type="submit"
+            // type="submit"
             fullWidth
             variant="contained"
             color="primary"
