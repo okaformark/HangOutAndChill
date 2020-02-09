@@ -42,15 +42,6 @@ const useStyles = makeStyles(theme => ({
 const  UserPersonalInfo = (props) => {
     const classes = useStyles();
 
-    // const proceed = (e, props) => {
-    //     e.preventDefault();
-    //     props.nextStep();
-    // };
-
-    // const back = (e, props) => {
-    //     e.preventDefault();
-    //     props.prevStep();
-    // };
 return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
