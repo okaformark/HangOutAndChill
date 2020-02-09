@@ -18,19 +18,6 @@ import 'firebase/auth';
 import Auth from '../Auth/Auth';
 import userData from '../Helpers/UserData';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
 const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -215,7 +202,6 @@ export default function SignUp() {
         </form>
       </div>
       <Box mt={5}>
-        <Copyright />
       </Box>
     </Container>
   );
