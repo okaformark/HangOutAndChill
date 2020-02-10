@@ -24,11 +24,11 @@ namespace HangOutAndChill.Controllers
 
        // GET: api/ScheduleAppointment
        [HttpGet]
-        public IActionResult Get()
+        public IActionResult/*IEnumerable<ScheduleAppointment> */Get()
         {
-            var schedules = _repo.GetSchedule().Select(s => new ScheduleEventData(s.Id, s.StartTime, s.EndTime, s.Subject) { IsReadonly = s.Id != Guid.Parse("D3D44C7B-EA96-4D80-A630-20CFF9E0D581") });
+            var schedules = _repo.GetSchedule().Select(s => new ScheduleEventData(s.Id, s.UserId, s.Status, s.Subject, s.Description,s.StartTime, s.EndTime, s.FirstName, s.LastName, s.ProfileImage)/*(s.Id, s.StartTime, s.EndTime, s.Status, s.Subject, s.FirstName, s.LastName, s.ProfilePic, s.Description)*/ /*{ IsReadonly = s.Id != Guid.Parse("9669C78B-CCA9-48AF-B000-DEF988D0BF4C") }*/);
 
-
+            //return schedules;
             return Ok(new { result = schedules, count = schedules.Count() });
         }
 
@@ -36,7 +36,7 @@ namespace HangOutAndChill.Controllers
         [HttpGet("{id}", Name = "GetSingleSchedule")]
         public ScheduleAppointment Get(Guid userId)
         {
-            return _repo.GetSchedule().FirstOrDefault();
+            return _repo.GetSchedule().FirstOrDefault(s => s.UserId == userId);
         }
 
         [HttpPost]
@@ -55,8 +55,7 @@ namespace HangOutAndChill.Controllers
                     Subject = value.Subject,
                     Location = value.Location,
                     Description = value.Description,
-                    UserFirebaseId = value.UserFirebaseId,
-                    isReadonly = true
+                    UserFirebaseId = value.UserFirebaseId
                 };
 
                 _repo.AddSchedule(appointment);
@@ -103,7 +102,7 @@ namespace HangOutAndChill.Controllers
             }
             //var data = db.ScheduleEventDatas.ToList();
             //return Json(data, JsonRequestBehavior.AllowGet);
-            return Ok(_repo.GetSchedule().Select(s => new ScheduleEventData(s.Id, s.StartTime, s.EndTime, s.Subject) { IsReadonly = s.UserId != Guid.Parse("D3D44C7B-EA96-4D80-A630-20CFF9E0D581") }));
+            return Ok(_repo.GetSchedule().Select(s => new ScheduleEventData(s.Id, s.UserId, s.Status, s.Subject, s.Description, s.StartTime, s.EndTime, s.FirstName, s.LastName, s.ProfileImage) /*{ IsReadonly = s.UserId != Guid.Parse("9669C78B-CCA9-48AF-B000-DEF988D0BF4C") }*/));
         }
 
         public class EditParams
@@ -138,30 +137,55 @@ namespace HangOutAndChill.Controllers
 
     public class ScheduleEventData
     {
-
         public Guid Id { get; set; }
+        public Guid UserId { get; set; }
+        public string Status { get; set; }
+        public string Subject { get; set; }
+        public string Description { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public string Subject { get; set; }
         public string Location { get; set; }
-        public string Description { get; set; }
         public bool IsAllDay { get; set; }
         public bool IsReadonly { get; set; }
         public object StartTimezone { get; set; }
         public object EndTimezone { get; set; }
         public User UserFirebaseId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string ProfileImage { get; set; }
 
         public ScheduleEventData()
         {
 
         }
 
-        public ScheduleEventData(Guid id, DateTime StartTime, DateTime EndTime, string Subject)
+        public ScheduleEventData(Guid id,Guid UserId, string Status, string Subject, string Description, DateTime StartTime, DateTime EndTime,string Location, string FirstName, string LastName, string ProfilePic)
         {
             Id = id;
+            this.UserId = UserId;
             this.EndTime = EndTime;
+            this.Location = Location;
             this.StartTime = StartTime;
             this.Subject = Subject;
+            this.FirstName = FirstName;
+            this.LastName = LastName;
+            this.ProfileImage = ProfilePic;
+            this.Description = Description;
+            this.Status = Status;
+        }
+
+        public ScheduleEventData(Guid id, Guid userId, string status, string subject, string description, DateTime startTime, DateTime endTime, string firstName, string lastName, string profilePic)
+        {
+            Id = id;
+            UserId = userId;
+            Status = status;
+            Subject = subject;
+            Description = description;
+            StartTime = startTime;
+            EndTime = endTime;
+            FirstName = firstName;
+            LastName = lastName;
+            ProfileImage = profilePic;
         }
 
         public override bool Equals(object obj)

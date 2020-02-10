@@ -18,5 +18,8 @@ namespace HangOutAndChill.DTOs
         public string Location { get; set; }
         public User UserFirebaseId { get; set; }
         public bool isReadonly { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string ProfileImage { get; set; }
     }
 }

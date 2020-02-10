@@ -7,8 +7,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
-import getFriends from '../Helpers/UserData';
-
+import GetFriends from '../Helpers/UserData';
+import GetSchedules from '../Helpers/ScheduleDataRequest';
+import './Friends.scss';
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
@@ -22,21 +23,29 @@ const useStyles = makeStyles(theme => ({
 
 export default function AlignItemsList() {
   const classes = useStyles();
-  const [state, setState] = React.useState([]);
-  getFriends.getAllUsers()
-    .then((result) => {
-        setState(result)
-    })
+  //const [state, setState] = React.useState([]);
+  const [schedules, setSchedules] = React.useState([])
+//   GetFriends.getAllUsers()
+//     .then((result) => {
+//         setState(result)
+//     })
+    GetSchedules.getAllSchedule()
+        .then((resp) => {
+            let response =[]
+            response = resp.result
+            console.log(response,"lolo")
+            setSchedules(response);
+        })
     .catch(err=> console.error("could not get friends",err));
-    return state.map((friend) => {
+     return schedules.map((schedule) => {
         return (
             <List className={classes.root}>
               <ListItem alignItems="flex-start">
                 <ListItemAvatar>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                  <Avatar alt={`${schedule.FirstName}`} src={schedule.ProfileImage}/>
                 </ListItemAvatar>
                 <ListItemText
-                  primary="Brunch this weekend?"
+                  primary={`${schedule.Status} || ${schedule.Subject}`}
                   secondary={
                     <React.Fragment>
                       <Typography
@@ -44,11 +53,11 @@ export default function AlignItemsList() {
                         variant="body2"
                         className={classes.inline}
                         color="textPrimary"
-                        friend={friend.FirstName}
                       >
-                        {friend.FirstName}
+                        {`${schedule.FirstName} ${schedule.LastName}`}
+                        <br />
                       </Typography>
-                      {" — I'll be in your neighborhood doing errands this…"}
+                      {schedule.Description}
                     </React.Fragment>
                   }
                 />

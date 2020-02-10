@@ -44,7 +44,7 @@ class MyCalendar extends React.Component {
     crudUrl: 'http://localhost:62528/api/scheduleAppointment',
     adaptor: new UrlAdaptor({headers:[{authentication:"bearer " + sessionStorage.getItem('token')}]}),
     crossDomain: true,
-    IsReadonly: true
+    IsReadonly: false
   });
 
   // eventTemplate = (props) => {
@@ -58,7 +58,7 @@ class MyCalendar extends React.Component {
       <ScheduleComponent 
         currentView='Month'
         eventSettings={{dataSource: this.dataManager}}
-        height= 'auto'
+         height= "550px" width="800px"
         >
         <ViewsDirective>
           <ViewDirective option='Day'></ViewDirective>
