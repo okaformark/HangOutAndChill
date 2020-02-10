@@ -40,6 +40,7 @@ const ButtonAppBar = () => {
   const handleSingInOnClick = () => {
     setSignIn(true);
     setRegister(false);
+    console.log("ppp")
   }
   return (
     <div className={classes.root}>

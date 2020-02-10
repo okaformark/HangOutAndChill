@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useCallback, useContext } from 'react';
+import { withRouter, Redirect} from 'react-router';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +15,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import  {AuthContext}  from '../Auth/Auth';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -33,9 +37,45 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignIn() {
+function SignIn({history}) {
   const classes = useStyles();
+  const [signInUser, setSignInUser] = React.useState([
+    {
+      email: '',
+      password: '', 
+    }
+  ])
+  const signInClickEvent = useCallback(
+    async e => {
+      e.preventDefault();
+      try {
+        await firebase.default
+          .auth()
+          .signInWithEmailAndPassword(signInUser.email, signInUser.password);
+        history.push("/");
+      } catch (error) {
+        alert (error);
+      }
+    }, [history]
+  )
 
+  const emailChange = e => {
+    const tempUser = { ...signInUser };
+    tempUser.email = e.target.value;
+    setSignInUser(tempUser);
+};
+
+const passwordChange = e => {
+    const tempUser = { ...signInUser };
+    tempUser.password = e.target.value;
+    setSignInUser(tempUser);
+};
+
+
+  const { currentUser } = useContext(AuthContext);
+    if (currentUser) {
+      return <Redirect to="/" />
+    }
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -57,6 +97,7 @@ export default function SignIn() {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={emailChange}
           />
           <TextField
             variant="outlined"
@@ -68,6 +109,7 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange= {passwordChange}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -79,6 +121,7 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={signInClickEvent}
           >
             Sign In
           </Button>
@@ -101,3 +144,5 @@ export default function SignIn() {
     </Container>
   );
 }
+
+export default withRouter(SignIn)

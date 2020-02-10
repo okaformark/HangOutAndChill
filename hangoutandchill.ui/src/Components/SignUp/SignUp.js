@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,9 +12,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-// import {Link} from 'react-router-dom';
+import { withRouter} from 'react-router';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import app from '../Helpers/FbConnection';
 import Auth from '../Auth/Auth';
 import userData from '../Helpers/UserData';
 
@@ -40,45 +41,46 @@ const useStyles = makeStyles(theme => ({
 
 
 
-export default function SignUp() {
+function SignUp({ history }) {
   const classes = useStyles();
-  const [user, setUser] = React.useState([
-      {
-        email: '',
-        password: '',
-        firstName: '',
-        lastName: '', 
-        firebaseUid: '' 
-      }
-  ])
+  const baseUrl = 'http://localhost:62528/api';
+  const [user, setUser] = React.useState("")
 
- const signUpClickEvent = e => {
+ const signUpClickEvent =useCallback(async e => {
       e.preventDefault();
-    Auth.registerUser(user)
-        .then(() =>{
-            const userObject = {
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                firebaseUid: firebase.auth().currentUser.uid
-            }
-            console.log(userObject,"pop");
-            userData.addUserToDatabase(userObject)
-            .then(() => {
-                userData.getUser(userObject.firebaseUid)
-                    .then((resp) => { 
-                        console.log(resp,"rrr");
-                        const userSignUpObject = {
-                            firstName: resp.data.FirstName,
-                            lastName: resp.data.LastName,
-                            email: resp.data.Email,
-                            firebaseUid:resp.data.FirebaseUid
-                        }
-                        this.props.getUser(userSignUpObject)
-                    })
-            })
+    try {
+      await firebase.default
+        .auth()
+        .createUserWithEmailAndPassword(user.email, user.password);
+        history.push("/");
+    } catch (error) {
+      alert(error)
+    }
+    // Auth.registerUser(user)
+    //     .then(() =>{
+        const userObject = {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            firebaseUid: firebase.auth().currentUser.uid
+          }
+        console.log(userObject,"pop");
+        userData.addUserToDatabase(userObject)
+        .then(() => {
+            userData.getUser(userObject.firebaseUid)
+                .then((resp) => { 
+                    console.log(resp,"rrr");
+                    const userSignUpObject = {
+                        firstName: resp.data.FirstName,
+                        lastName: resp.data.LastName,
+                        email: resp.data.Email,
+                        firebaseUid:resp.data.FirebaseUid
+                    }
+                    this.props.getUser(userSignUpObject)
+                })
         })
-  };
+        // })
+  }, [history, user.firstName,user.email,user.lastName,user.password]);
 
    const firstNameChange = e => {
         const tempUser = { ...user };
@@ -114,7 +116,7 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={signUpClickEvent}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -188,7 +190,7 @@ export default function SignUp() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={signUpClickEvent}
+            // onClick={signUpClickEvent}
           >
             Sign Up
           </Button>
@@ -206,3 +208,5 @@ export default function SignUp() {
     </Container>
   );
 }
+
+export default withRouter(SignUp)
