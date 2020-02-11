@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using HangOutAndChill.DTOs;
 using HangOutAndChill.Interfaces;
 using HangOutAndChill.Models;
+using HangOutAndChill.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -22,11 +23,11 @@ namespace HangOutAndChill.Controllers
             _repo = repo;
         }
 
-       // GET: api/ScheduleAppointment
-       [HttpGet]
+        // GET: api/ScheduleAppointment
+        [HttpGet]
         public IActionResult/*IEnumerable<ScheduleAppointment> */Get()
         {
-            var schedules = _repo.GetSchedule().Select(s => new ScheduleEventData(s.Id, s.UserId, s.Status, s.Subject, s.Description,s.StartTime, s.EndTime, s.FirstName, s.LastName, s.ProfileImage)/*(s.Id, s.StartTime, s.EndTime, s.Status, s.Subject, s.FirstName, s.LastName, s.ProfilePic, s.Description)*/ /*{ IsReadonly = s.Id != Guid.Parse("9669C78B-CCA9-48AF-B000-DEF988D0BF4C") }*/);
+            var schedules = _repo.GetSchedule().Select(s => new ScheduleEventData(s.Id, s.UserId, s.Status, s.Subject, s.Description,s.StartTime, s.EndTime, s.FirstName, s.LastName, s.ProfileImage) /*{ IsReadonly = s.Id != userId }*/);
 
             //return schedules;
             return Ok(new { result = schedules, count = schedules.Count() });
@@ -34,13 +35,13 @@ namespace HangOutAndChill.Controllers
 
         //GET: api/ScheduleAppointment/5
         [HttpGet("{id}", Name = "GetSingleSchedule")]
-        public ScheduleAppointment Get(Guid userId)
+        public ScheduleAppointment GetSingle(Guid userId)
         {
             return _repo.GetSchedule().FirstOrDefault(s => s.UserId == userId);
         }
 
-        [HttpPost]
-        public IActionResult UpdateData(EditParams param)
+        [HttpPost("{userId}")]
+        public IActionResult UpdateData(EditParams param, Guid userId)
         {
             if (param.Action == "insert" || (param.Action == "batch" && param.Added.Count() > 0 )) // this block of code will execute while inserting the appointments
             {
@@ -50,12 +51,14 @@ namespace HangOutAndChill.Controllers
                 DateTime endTime = value.EndTime;
                 var appointment = new AddScheduleDTO
                 {
+                    UserId = userId,
                     StartTime = startTime,
                     EndTime = endTime,
                     Subject = value.Subject,
                     Location = value.Location,
                     Description = value.Description,
-                    UserFirebaseId = value.UserFirebaseId
+                    UserFirebaseId = value.UserFirebaseId,
+                    isReadonly = true
                 };
 
                 _repo.AddSchedule(appointment);
@@ -74,7 +77,8 @@ namespace HangOutAndChill.Controllers
                     Subject = value.Subject,
                     Location = value.Location,
                     Description = value.Description,
-                    UserFirebaseId = value.UserFirebaseId
+                    UserFirebaseId = value.UserFirebaseId,
+                    isReadonly = true
                 };
 
                 _repo.UpdateSchedule(value.Id, appointment);
@@ -102,7 +106,7 @@ namespace HangOutAndChill.Controllers
             }
             //var data = db.ScheduleEventDatas.ToList();
             //return Json(data, JsonRequestBehavior.AllowGet);
-            return Ok(_repo.GetSchedule().Select(s => new ScheduleEventData(s.Id, s.UserId, s.Status, s.Subject, s.Description, s.StartTime, s.EndTime, s.FirstName, s.LastName, s.ProfileImage) /*{ IsReadonly = s.UserId != Guid.Parse("9669C78B-CCA9-48AF-B000-DEF988D0BF4C") }*/));
+            return Ok(_repo.GetSchedule().Select(s => new ScheduleEventData(s.Id, s.UserId, s.Status, s.Subject, s.Description, s.StartTime, s.EndTime, s.FirstName, s.LastName, s.ProfileImage) { IsReadonly = s.UserId != userId }));
         }
 
         public class EditParams

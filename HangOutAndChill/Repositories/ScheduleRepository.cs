@@ -94,10 +94,12 @@ namespace HangOutAndChill.Repositories
             //          ,[EndTime] = @EndTime
             //          ,[Location] = @Location
             //     WHERE Id = @Id";
+
+            //Remove the userId from the Update Sql Query
+            //[UserId] = @UserId
             var sql = @"UPDATE [dbo].[Schedule]
                            SET 
-                              [UserId] = @UserId
-                              ,[Status] = @Status
+                              [Status] = @Status
                               ,[Subject] = @Subject
                               ,[Description] = @Description
                               ,[StartTime] = @StartTime
@@ -105,7 +107,7 @@ namespace HangOutAndChill.Repositories
                               ,[Location] = @Location
                               ,[firstName] = @firstName
                               ,[LastName] = @LastName
-                              ,[profileImage] = @profilePic
+                              ,[profileImage] = @profileImage
                          WHERE Id = @Id";
             updatedSchedule.Id = scheduleId;
             return db.Execute(sql, updatedSchedule) == 1;
