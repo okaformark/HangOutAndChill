@@ -52,7 +52,7 @@ function SignUp({ history }) {
       await firebase.default
         .auth()
         .createUserWithEmailAndPassword(user.email, user.password);
-        history.push("/");
+        history.push("/buttonAppBar/signIn");
     } catch (error) {
       alert(error)
     }
@@ -71,12 +71,16 @@ function SignUp({ history }) {
                 .then((resp) => { 
                     console.log(resp,"rrr");
                     const userSignUpObject = {
+                        userId: resp.data.Id,
                         firstName: resp.data.FirstName,
                         lastName: resp.data.LastName,
-                        email: resp.data.Email,
-                        firebaseUid:resp.data.FirebaseUid
                     }
-                    this.props.getUser(userSignUpObject)
+                    sessionStorage.setItem("userInfo", JSON.stringify(userSignUpObject));
+                  // userData.addUserIdtoScheduleTable(userSignUpObject)
+                  //   .then((resp)=>{
+                  //     console.error(resp,"patch")
+                  //   })
+                  //   .catch(err=>console.error("did not patch",err))
                 })
         })
         // })
@@ -191,12 +195,13 @@ function SignUp({ history }) {
             color="primary"
             className={classes.submit}
             // onClick={signUpClickEvent}
+            to="/buttonAppBar/signUp"
           >
             Sign Up
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/buttonAppBar/signIn" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>

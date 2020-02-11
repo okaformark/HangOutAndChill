@@ -20,7 +20,11 @@ import PeopleAltOutlinedIcon from '@material-ui/icons/PeopleAltOutlined';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import Friends from '../Friends/Friends';
 import MyCalendar from '../Calender/MyCalender';
-
+import Register from '../SignUp/Register';
+import Button from '@material-ui/core/Button'
+import firebase from 'firebase/app';
+import 'firebase/auth'
+import './Home.scss'
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -103,7 +107,11 @@ export default function PersistentDrawerLeft() {
         setFriend(!friend);
        setSchedule(false);
   }
-
+const logOut = () =>{
+  console.log(firebase.auth().currentUser.uid);
+  return firebase.auth().signOut();
+ 
+}
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -112,6 +120,7 @@ export default function PersistentDrawerLeft() {
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open,
         })}
+        
       >
         <Toolbar>
           <IconButton
@@ -126,6 +135,7 @@ export default function PersistentDrawerLeft() {
           <Typography variant="h6" noWrap>
             Frienduler
           </Typography>
+          <Button color="inherit" onClick={logOut} to="/buttonAppBar">SignOut</Button>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -177,10 +187,6 @@ export default function PersistentDrawerLeft() {
         })}
       >
         <div className={classes.drawerHeader} />
-      </main>
-      <br />
-    <div className="container">
-        <div className="col-6">
             <div className="Friends">
                 {friend ? 
                 <Friends /> : 
@@ -192,9 +198,9 @@ export default function PersistentDrawerLeft() {
             {schedule ? <MyCalendar /> : <div></div>}
             </div>
       </div>
-    </div>
-    </div>
-    </div>
+      </main>
+      <br />
+     </div>
   );
 }
 

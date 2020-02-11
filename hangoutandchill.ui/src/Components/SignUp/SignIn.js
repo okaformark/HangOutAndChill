@@ -11,11 +11,16 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import  {AuthContext}  from '../Auth/Auth';
+import UserData from '../Helpers/UserData';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -51,12 +56,26 @@ function SignIn({history}) {
       try {
         await firebase.default
           .auth()
-          .signInWithEmailAndPassword(signInUser.email, signInUser.password);
-        history.push("/");
+          .signInWithEmailAndPassword(signInUser.email, signInUser.password).then((user) => {
+            UserData.getUser(user.user.uid).then((userInfo) => {
+              const userSignUpObject = {
+                userId: userInfo.data.Id,
+                firstName: userInfo.data.FirstName,
+                lastName: userInfo.data.LastName,
+            }
+            sessionStorage.setItem("userInfo", JSON.stringify(userSignUpObject));
+            }).catch((error) => {
+              console.error(`Error getting user info on signin for user with email ${signInUser.email}: `, error);
+            });
+            // sessionStorage.setItem('userInfo', JSON.stringify(userSignUpObject));
+          }).catch((error) => {
+            console.error(`Could not sign in user with email ${signInUser.email}: `, error);
+          });
+        history.push("/home");
       } catch (error) {
         alert (error);
       }
-    }, [history]
+    }, [history, signInUser.email,signInUser.password]
   )
 
   const emailChange = e => {
@@ -72,11 +91,22 @@ const passwordChange = e => {
 };
 
 
-  const { currentUser } = useContext(AuthContext);
-    if (currentUser) {
-      return <Redirect to="/" />
+  //const { currentUser } = useContext(AuthContext);
+    if (firebase.auth().currentUser) {
+      return <Redirect to="/home" />
     }
   return (
+    // <>
+    // <AppBar position="static">
+    //   <Toolbar>
+    //     <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+    //       <MenuIcon />
+    //     </IconButton>
+    //     <Typography variant="h6" className={classes.title}>
+    //       News
+    //     </Typography>
+    //   </Toolbar>
+    // </AppBar>
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -122,6 +152,7 @@ const passwordChange = e => {
             color="primary"
             className={classes.submit}
             onClick={signInClickEvent}
+            to='/home'
           >
             Sign In
           </Button>
@@ -132,7 +163,7 @@ const passwordChange = e => {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/buttonAppBar/signUp" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
@@ -142,6 +173,7 @@ const passwordChange = e => {
       <Box mt={8}>
       </Box>
     </Container>
+    // </>
   );
 }
 

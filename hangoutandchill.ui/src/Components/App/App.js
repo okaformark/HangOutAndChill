@@ -113,11 +113,11 @@ const App = () => {
     <AuthProvider>
       <Router>
         <Switch>
-          <PrivateRoute exact path="/Register" component={Register} />
+          <PrivateRoute exact path="/home/register" component={Register} />
           <PrivateRoute exact path="/home" component={Home} />
-          <Route exact path="/" component={ButtonAppBar} />
-          <Route exact path="/buttonAppBar/SignUp" component={SignUp} />
-          <Route exact path="/buttonAppBar/SignIn" component={SignIn} />
+          <Route path="/" component={ButtonAppBar} />
+          <Route exact path="/buttonAppBar/signUp" component={SignUp} />
+          <Route exact path="/buttonAppBar/signIn" component={SignIn} />
         </Switch>
       </Router>
     </AuthProvider>

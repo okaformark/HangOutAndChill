@@ -18,4 +18,11 @@ import Axios from 'axios';
 
 })
 
- export default { addUserToDatabase, getAllUsers, getUser};
+const addUserIdtoScheduleTable = (user) => Axios.patch(`${databaseURL}/ScheduleAppointment`, user);
+
+const getSessionUser = () => {
+    const userInfo = sessionStorage.getItem('userInfo');
+    return JSON.parse(userInfo);
+  };
+
+ export default { addUserToDatabase, getAllUsers, getUser, addUserIdtoScheduleTable, getSessionUser};

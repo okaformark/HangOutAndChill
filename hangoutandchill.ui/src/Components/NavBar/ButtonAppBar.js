@@ -37,10 +37,9 @@ const ButtonAppBar = () => {
     setSignIn(false);
   }
 
-  const handleSingInOnClick = () => {
+  const handleSignInOnClick = () => {
     setSignIn(true);
     setRegister(false);
-    console.log("ppp")
   }
   return (
     <div className={classes.root}>
@@ -54,12 +53,12 @@ const ButtonAppBar = () => {
           </Typography>
             <Button 
               tag={RRNavLink}
-              to='/SignUp'
+              to='/buttonAppBar/signUp'
               color="inherit"
               onClick={handleSignUpOnClick}
               >Sign Up
             </Button>
-          <Button color="inherit" onClick={handleSingInOnClick}>Sign In</Button>
+          <Button color="inherit" onClick={handleSignInOnClick} to='/buttonAppBar/signIn' tag={RRNavLink}>Sign In</Button>
         </Toolbar>
       </AppBar>
       {isRegister ? <SignUp /> : null}

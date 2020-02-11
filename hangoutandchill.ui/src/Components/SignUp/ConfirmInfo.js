@@ -191,7 +191,7 @@ export default function ConfirmIfo(props) {
       <CssBaseline />
       <div className={classes.root}>
         {/* <FixedSizeList height={1000} width={1000} itemSize={50} itemCount={1}> */}
-        <AppBar title="Confirm User Data"  justifyContent="center" />
+        <AppBar title="Confirm User Data"  justifycontent="center" />
         <List>
           {/* <ListItem>
             <ListItemText primary="First Name" secondary={props.firstName} /> 

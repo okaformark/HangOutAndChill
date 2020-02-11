@@ -10,6 +10,9 @@ import Typography from '@material-ui/core/Typography';
 import GetFriends from '../Helpers/UserData';
 import GetSchedules from '../Helpers/ScheduleDataRequest';
 import './Friends.scss';
+import UserData from '../Helpers/UserData';
+import firebase from 'firebase/app';
+import 'firebase/auth'
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
@@ -36,6 +39,10 @@ export default function AlignItemsList() {
             console.log(response,"lolo")
             setSchedules(response);
         })
+        UserData.getUser(firebase.auth().currentUser.uid)
+          .then((result) => {
+            console.error(result.data,"////")
+          })
     .catch(err=> console.error("could not get friends",err));
      return schedules.map((schedule) => {
         return (
