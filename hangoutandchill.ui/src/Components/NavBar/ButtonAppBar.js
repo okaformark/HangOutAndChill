@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Register from '../SignUp/Register';
 import SignUp from '../SignUp/SignUp';
+import SignIn from '../SignUp/SignIn';
 import { NavLink as RRNavLink } from 'react-router-dom';
 
 
@@ -23,16 +24,22 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
 }));
-// {isRegister ?
-//   <Register />
-//   : null
-//   }
+
 const ButtonAppBar = () => {
   const [isRegister, setRegister] = useState(false);
+
+  const [isSignIn, setSignIn] = useState(false);
+
   const classes = useStyles();
-   const handleOnClick = () => {
+
+   const handleSignUpOnClick = () => {
     setRegister(true);
-    return <SignUp />
+    setSignIn(false);
+  }
+
+  const handleSignInOnClick = () => {
+    setSignIn(true);
+    setRegister(false);
   }
   return (
     <div className={classes.root}>
@@ -42,21 +49,20 @@ const ButtonAppBar = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            Hangout and Chill
+            Friendular
           </Typography>
-          {/* <NavLink tag={RRNavLink} to='/SignUp'> */}
             <Button 
               tag={RRNavLink}
-              to='/SignUp'
+              to='/buttonAppBar/signUp'
               color="inherit"
-              onClick={handleOnClick}
-              >SignUp
+              onClick={handleSignUpOnClick}
+              >Sign Up
             </Button>
-          {/* </NavLink> */}
-            
-          <Button color="inherit">Login</Button>
+          <Button color="inherit" onClick={handleSignInOnClick} to='/buttonAppBar/signIn' tag={RRNavLink}>Sign In</Button>
         </Toolbar>
       </AppBar>
+      {isRegister ? <SignUp /> : null}
+      {isSignIn ? <SignIn /> : null}
     </div>
   );
 }

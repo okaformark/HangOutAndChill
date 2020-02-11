@@ -5,4 +5,24 @@ import Axios from 'axios';
 
  const getUser = (userId) => Axios.get(`${databaseURL}/User/${userId}`);
 
- export default { addUserToDatabase, getUser};
+ const getAllUsers = () => new Promise((resolve, reject) => {
+    Axios.get(`${databaseURL}/User`)
+        .then(result => {
+            let users = [];
+            users = result.data;
+            // console.log (result.data,'hu');
+            // console.log (users,'ho');
+            resolve(users);
+        })
+        .catch( err => console.error(reject, err));
+
+})
+
+const addUserIdtoScheduleTable = (user) => Axios.patch(`${databaseURL}/ScheduleAppointment`, user);
+
+const getSessionUser = () => {
+    const userInfo = sessionStorage.getItem('userInfo');
+    return JSON.parse(userInfo);
+  };
+
+ export default { addUserToDatabase, getAllUsers, getUser, addUserIdtoScheduleTable, getSessionUser};

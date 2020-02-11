@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HangOutAndChill.Repositories
 {
-    public class UserRepository : IUser
+    public class UserController : IUser
 
     {
         string _connectionString = "Server=localhost;Database=testing;Trusted_Connection=True;";

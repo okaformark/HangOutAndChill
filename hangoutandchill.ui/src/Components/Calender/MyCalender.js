@@ -16,7 +16,7 @@ import {
   Resize,
 } from '@syncfusion/ej2-react-schedule';
  import { DataManager, UrlAdaptor } from '@syncfusion/ej2-data';
-import getAllSchedules from '../Helpers/ScheduleDataRequest';
+import UserData from '../Helpers/UserData';
 
 class MyCalendar extends React.Component {
 
@@ -24,37 +24,41 @@ class MyCalendar extends React.Component {
     schedule:[{}]
   }
 
-  // getSchedules = () => {
-  //   getAllSchedules.getAllSchedule()
-  //     .then(result => {
-  //       const resp= result;
-  //       this.setState({schedule: [...resp.result]}, () => {
-  //         console.error(this.state.schedule, "schedule")
-  //       })
-  //     })
-  //     .catch(err => console.error('cannot load schedules', err))
-  // }
-
-  // componentDidMount () {
-  //   this.getSchedules();
-  // }
+//  getUser = () => {
+//   userData.getUser(firebase.auth().currentUser.uid)
+//   .then((resp) => { 
+//       console.log(resp,"ooooo");
+//       const userSignUpObject = {
+//           userId: resp.data.Id,
+//           firstName: resp.data.FirstName,
+//           lastName: resp.data.LastName,
+//       }
+//     userData.addUserIdtoScheduleTable(userSignUpObject)
+//       .then((resp)=>{
+//         console.error(resp,"patch")
+//       })
+//       .catch(err=>console.error("did not patch",err))
+//   })
+//  }
 
   dataManager = new DataManager({
-    url: 'http://localhost:62528/api/scheduleAppointment', // 'controller/actions'
-    crudUrl: 'http://localhost:62528/api/scheduleAppointment',
+    url: `http://localhost:62528/api/scheduleAppointment/${UserData.getSessionUser().userId}`, // 'controller/actions'
+    crudUrl: `http://localhost:62528/api/scheduleAppointment/${UserData.getSessionUser().userId}`,
     adaptor: new UrlAdaptor({headers:[{authentication:"bearer " + sessionStorage.getItem('token')}]}),
     crossDomain: true,
+    IsReadonly: false
   });
 
+  // eventTemplate = (props) => {
+  // return (<div className="template-wrap">{props.Subject}</div>)
+  // }
 
   render() {
-    const schedules = this.state.schedule;
-
     return (
       <ScheduleComponent 
         currentView='Month'
         eventSettings={{dataSource: this.dataManager}}
-        height= 'auto'
+        height= "550px" width="800px"
         >
         <ViewsDirective>
           <ViewDirective option='Day'></ViewDirective>

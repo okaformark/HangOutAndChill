@@ -9,7 +9,7 @@ namespace HangOutAndChill.DTOs
     public class AddScheduleDTO
     {
         public Guid Id { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public string Status { get; set; }
         public string Subject { get; set; }
         public string Description { get; set; }
@@ -17,5 +17,9 @@ namespace HangOutAndChill.DTOs
         public DateTime EndTime { get; set; }
         public string Location { get; set; }
         public User UserFirebaseId { get; set; }
+        public bool isReadonly { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string ProfileImage { get; set; }
     }
 }

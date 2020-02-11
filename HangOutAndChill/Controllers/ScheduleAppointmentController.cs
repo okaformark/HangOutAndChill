@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using HangOutAndChill.DTOs;
 using HangOutAndChill.Interfaces;
 using HangOutAndChill.Models;
+using HangOutAndChill.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -22,25 +23,25 @@ namespace HangOutAndChill.Controllers
             _repo = repo;
         }
 
-       // GET: api/ScheduleAppointment
-       [HttpGet]
-        public IActionResult Get()
+        // GET: api/ScheduleAppointment
+        [HttpGet]
+        public IActionResult/*IEnumerable<ScheduleAppointment> */Get()
         {
-            var schedules = _repo.GetSchedule().Select(s => new ScheduleEventData(s.Id, s.StartTime, s.EndTime, s.Subject));
+            var schedules = _repo.GetSchedule().Select(s => new ScheduleEventData(s.Id, s.UserId, s.Status, s.Subject, s.Description,s.StartTime, s.EndTime, s.FirstName, s.LastName, s.ProfileImage) /*{ IsReadonly = s.Id != userId }*/);
 
-
+            //return schedules;
             return Ok(new { result = schedules, count = schedules.Count() });
         }
 
         //GET: api/ScheduleAppointment/5
         [HttpGet("{id}", Name = "GetSingleSchedule")]
-        public ScheduleAppointment Get(Guid userId)
+        public ScheduleAppointment GetSingle(Guid userId)
         {
-            return _repo.GetSchedule().FirstOrDefault();
+            return _repo.GetSchedule().FirstOrDefault(s => s.UserId == userId);
         }
 
-        [HttpPost]
-        public IActionResult UpdateData(EditParams param)
+        [HttpPost("{userId}")]
+        public IActionResult UpdateData(EditParams param, Guid userId)
         {
             if (param.Action == "insert" || (param.Action == "batch" && param.Added.Count() > 0 )) // this block of code will execute while inserting the appointments
             {
@@ -50,12 +51,14 @@ namespace HangOutAndChill.Controllers
                 DateTime endTime = value.EndTime;
                 var appointment = new AddScheduleDTO
                 {
+                    UserId = userId,
                     StartTime = startTime,
                     EndTime = endTime,
                     Subject = value.Subject,
                     Location = value.Location,
                     Description = value.Description,
-                    UserFirebaseId = value.UserFirebaseId
+                    UserFirebaseId = value.UserFirebaseId,
+                    isReadonly = true
                 };
 
                 _repo.AddSchedule(appointment);
@@ -74,33 +77,36 @@ namespace HangOutAndChill.Controllers
                     Subject = value.Subject,
                     Location = value.Location,
                     Description = value.Description,
-                    UserFirebaseId = value.UserFirebaseId
+                    UserFirebaseId = value.UserFirebaseId,
+                    isReadonly = true
                 };
 
                 _repo.UpdateSchedule(value.Id, appointment);
 
             }
-            //    if (param.Action == "remove" || (param.Action == "batch" && param.Deleted.Count()>0)) // this block of code will execute while removing the appointment
-            //    {
-            //        if (param.Action == "remove")
-            //        {
-            //            int key = Convert.ToInt32(param.Key);
-            //            ScheduleEventData appointment = db.ScheduleEventDatas.Where(c => c.Id == key).FirstOrDefault();
-            //            if (appointment != null) db.ScheduleEventDatas.DeleteOnSubmit(appointment);
-            //        }
-            //        else
-            //        {
-            //            foreach (var apps in param.Deleted)
-            //            {
-            //                ScheduleEventData appointment = db.ScheduleEventDatas.Where(c => c.Id == apps.Id).FirstOrDefault();
-            //                if (apps != null) db.ScheduleEventDatas.DeleteOnSubmit(appointment);
-            //            }
-            //        }
-            //        db.SubmitChanges();
-            //    }
-            //    var data = db.ScheduleEventDatas.ToList();
-            //    return Json(data, JsonRequestBehavior.AllowGet);
-            return Ok(_repo.GetSchedule().Select(s => new ScheduleEventData(s.Id, s.StartTime, s.EndTime, s.Subject)));
+            if (param.Action == "remove" || (param.Action == "batch" && param.Deleted.Count() > 0)) // this block of code will execute while removing the appointment
+            {
+                //if (param.Action == "remove")
+                //{
+                //    int key = Convert.ToInt32(param.Key);
+                //    ScheduleEventData appointment = db.ScheduleEventDatas.Where(c => c.Id == key).FirstOrDefault();
+                //    if (appointment != null) db.ScheduleEventDatas.DeleteOnSubmit(appointment);
+                //}
+                //else
+                //{
+                //    foreach (var apps in param.Deleted)
+                //    {
+                //        ScheduleEventData appointment = db.ScheduleEventDatas.Where(c => c.Id == apps.Id).FirstOrDefault();
+                //        if (apps != null) db.ScheduleEventDatas.DeleteOnSubmit(appointment);
+                //    }
+                //}
+                //db.SubmitChanges();
+                var value = (param.Action == "remove") ? param.Value : param.Deleted[0];
+                _repo.DeleteSchedule(value.Id);
+            }
+            //var data = db.ScheduleEventDatas.ToList();
+            //return Json(data, JsonRequestBehavior.AllowGet);
+            return Ok(_repo.GetSchedule().Select(s => new ScheduleEventData(s.Id, s.UserId, s.Status, s.Subject, s.Description, s.StartTime, s.EndTime, s.FirstName, s.LastName, s.ProfileImage) { IsReadonly = s.UserId != userId }));
         }
 
         public class EditParams
@@ -111,6 +117,7 @@ namespace HangOutAndChill.Controllers
             public List<ScheduleEventData> Changed { get; set; }
             public List<ScheduleEventData> Deleted { get; set; }
             public ScheduleEventData Value { get; set; }
+            public bool IsReadonly { get; set; }
         }
 
         // POST: api/ScheduleAppointment
@@ -134,33 +141,55 @@ namespace HangOutAndChill.Controllers
 
     public class ScheduleEventData
     {
-
-        [JsonProperty("Id")]
         public Guid Id { get; set; }
-        [JsonProperty("StartTime")]
-        public DateTime StartTime { get; set; }
-        [JsonProperty("EndTime")]
-        public DateTime EndTime { get; set; }
-        [JsonProperty("Subject")]
+        public Guid UserId { get; set; }
+        public string Status { get; set; }
         public string Subject { get; set; }
-        public string Location { get; set; }
         public string Description { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public string Location { get; set; }
         public bool IsAllDay { get; set; }
+        public bool IsReadonly { get; set; }
         public object StartTimezone { get; set; }
         public object EndTimezone { get; set; }
         public User UserFirebaseId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string ProfileImage { get; set; }
 
         public ScheduleEventData()
         {
 
         }
 
-        public ScheduleEventData(Guid id, DateTime StartTime, DateTime EndTime, string Subject)
+        public ScheduleEventData(Guid id,Guid UserId, string Status, string Subject, string Description, DateTime StartTime, DateTime EndTime,string Location, string FirstName, string LastName, string ProfilePic)
         {
             Id = id;
+            this.UserId = UserId;
             this.EndTime = EndTime;
+            this.Location = Location;
             this.StartTime = StartTime;
             this.Subject = Subject;
+            this.FirstName = FirstName;
+            this.LastName = LastName;
+            this.ProfileImage = ProfilePic;
+            this.Description = Description;
+            this.Status = Status;
+        }
+
+        public ScheduleEventData(Guid id, Guid userId, string status, string subject, string description, DateTime startTime, DateTime endTime, string firstName, string lastName, string profilePic)
+        {
+            Id = id;
+            UserId = userId;
+            Status = status;
+            Subject = subject;
+            Description = description;
+            StartTime = startTime;
+            EndTime = endTime;
+            FirstName = firstName;
+            LastName = lastName;
+            ProfileImage = profilePic;
         }
 
         public override bool Equals(object obj)

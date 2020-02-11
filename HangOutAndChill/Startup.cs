@@ -37,7 +37,7 @@ namespace HangOutAndChill
             services.AddControllers().AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
             //services.AddTransient<SqlConnection>(provider => new SqlConnection(connectionString));
             services.AddScoped<IScheduleAppointment, ScheduleRepository>();
-            services.AddScoped<IUser, UserRepository>();
+            services.AddScoped<IUser, UserController>();
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
                 builder.AllowAnyOrigin()

@@ -1,149 +1,212 @@
-import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
+import React, { useCallback } from 'react';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import { withRouter} from 'react-router';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import app from '../Helpers/FbConnection';
 import Auth from '../Auth/Auth';
 import userData from '../Helpers/UserData';
 
-export class SignUp extends Component {
-    state = {
-        user: {
-          email: '',
-          password: '',
-          firstName: '',
-          lastName: '', 
-          firebaseUid: ''
-        },
-      }
+const useStyles = makeStyles(theme => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
 
-      signUpClickEvent = e => {
-        const { user } = this.state;
-          e.preventDefault();
-        Auth.registerUser(user)
-            .then(() =>{
-                const userObject = {
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: user.email,
-                    firebaseUid: firebase.auth().currentUser.uid
-                }
-                console.log(userObject,"pop");
-                userData.addUserToDatabase(userObject)
-                .then(() => {
-                    userData.getUser(userObject.firebaseUid)
-                        .then((response) => { console.log(response,"rrr");})
-                })
-            })
-      };
 
-      firstNameChange = e => {
-        const tempUser = { ...this.state.user };
-        tempUser.firstName = e.target.value;
-        this.setState({ user: tempUser });
-      };
-    
-      lastNameChange = e => {
-        const tempUser = { ...this.state.user };
-        tempUser.lastName = e.target.value;
-        this.setState({ user: tempUser });
-      };
-    
-      emailChange = e => {
-        const tempUser = { ...this.state.user };
-        tempUser.email = e.target.value;
-        this.setState({ user: tempUser });
-      };
-    
-      passwordChange = e => {
-        const tempUser = { ...this.state.user };
-        tempUser.password = e.target.value;
-        this.setState({ user: tempUser });
-      };
-    
-    render() {
-        const { user } = this.state;
-        return (
-            <div className="Register">
-                <div id="login-form">
-                <h1 className="text-center">Register</h1>
-                <form className="form-horizontal col-sm-6 col-sm-offset-3">
-                    <div className="form-group">
-                    <label htmlFor="inputFirstName" className="col-sm-4 control-label">
-                        First Name:
-                    </label>
-                    <div className="col-sm-8">
-                        <input
-                        type="name"
-                        className="form-control"
-                        id="inputFirstName"
-                        placeholder="First Name"
-                        value={user.firstName}
-                        onChange={this.firstNameChange}
-                        />
-                    </div>
-                    <label htmlFor="inputLastName" className="col-sm-4 control-label">
-                        Last Name:
-                    </label>
-                    <div className="col-sm-8">
-                        <input
-                        type="name"
-                        className="form-control"
-                        id="inputLastName"
-                        placeholder="Last Name"
-                        value={user.lastName}
-                        onChange={this.lastNameChange}
-                        />
-                    </div>
-                    <label htmlFor="inputEmail" className="col-sm-4 control-label">
-                        Email:
-                    </label>
-                    <div className="col-sm-8">
-                        <input
-                        type="email"
-                        className="form-control"
-                        id="inputEmail"
-                        placeholder="Email"
-                        value={user.email}
-                        onChange={this.emailChange}
-                        />
-                    </div>
-                    </div>
-                    <div className="form-group">
-                    <label htmlFor="inputPassword" className="col-sm-4 control-label">
-                        Password:
-                    </label>
-                    <div className="col-sm-8">
-                        <input
-                        type="password"
-                        className="form-control"
-                        id="inputPassword"
-                        placeholder="Password"
-                        value={user.password}
-                        onChange={this.passwordChange}
-                        />
-                    </div>
-                    </div>
-                    <div className="form-group">
-                    <div className="col-sm-12 text-center">
-                        <Link to="/Login">Need to Login?</Link>
-                    </div>
-                    </div>
-                    <div className="form-group">
-                    <div className="col-sm-12">
-                        <button
-                        type="submit"
-                        className="btn btn-default col-xs-12"
-                        onClick={this.signUpClickEvent}
-                        >
-                        Register
-                        </button>
-                    </div>
-                    </div>
-                </form>
-                </div>
-      </div>
-        )
+
+function SignUp({ history }) {
+  const classes = useStyles();
+  const baseUrl = 'http://localhost:62528/api';
+  const [user, setUser] = React.useState("")
+
+ const signUpClickEvent =useCallback(async e => {
+      e.preventDefault();
+    try {
+      await firebase.default
+        .auth()
+        .createUserWithEmailAndPassword(user.email, user.password);
+        history.push("/home");
+    } catch (error) {
+      alert(error)
     }
+    // Auth.registerUser(user)
+    //     .then(() =>{
+        const userObject = {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            firebaseUid: firebase.auth().currentUser.uid
+          }
+        console.log(userObject,"pop");
+        userData.addUserToDatabase(userObject)
+        .then(() => {
+            userData.getUser(userObject.firebaseUid)
+                .then((resp) => { 
+                    console.log(resp,"rrr");
+                    const userSignUpObject = {
+                        userId: resp.data.Id,
+                        firstName: resp.data.FirstName,
+                        lastName: resp.data.LastName,
+                    }
+                    sessionStorage.setItem("userInfo", JSON.stringify(userSignUpObject));
+                })
+        })
+        // })
+  }, [history, user.firstName,user.email,user.lastName,user.password]);
+
+   const firstNameChange = e => {
+        const tempUser = { ...user };
+        tempUser.firstName = e.target.value;
+        setUser(tempUser);
+    };
+
+    const lastNameChange = e => {
+        const tempUser = { ...user };
+        tempUser.lastName = e.target.value;
+        setUser(tempUser)
+    };
+
+    const emailChange = e => {
+        const tempUser = { ...user };
+        tempUser.email = e.target.value;
+        setUser(tempUser);
+    };
+
+    const passwordChange = e => {
+        const tempUser = { ...user };
+        tempUser.password = e.target.value;
+        setUser(tempUser);
+    };
+
+  return (
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign up
+        </Typography>
+        <form className={classes.form} noValidate onSubmit={signUpClickEvent}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="fname"
+                name="firstName"
+                variant="outlined"
+                required
+                fullWidth
+                id="firstName"
+                label="First Name"
+                autoFocus
+                placeholder="First Name"
+                defaultValue={user.firstName}
+                onChange={firstNameChange}
+
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="lastName"
+                label="Last Name"
+                name="lastName"
+                autoComplete="lname"
+                placeholder="Last Name"
+                defaultValue={user.lastName}
+                onChange={lastNameChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                placeholder="Email"
+                defaultValue={user.email}
+                onChange={emailChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                placeholder="Password"
+                defaultValue={user.password}
+                onChange={passwordChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                label="I want to receive inspiration, marketing promotions and updates via email."
+              />
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            // onClick={signUpClickEvent}
+            to="/buttonAppBar/signUp"
+          >
+            Sign Up
+          </Button>
+          <Grid container justify="flex-end">
+            <Grid item>
+              <Link href="/buttonAppBar/signIn" variant="body2">
+                Already have an account? Sign in
+              </Link>
+            </Grid>
+          </Grid>
+        </form>
+      </div>
+      <Box mt={5}>
+      </Box>
+    </Container>
+  );
 }
 
-export default SignUp
+export default withRouter(SignUp)

@@ -16,24 +16,49 @@ namespace HangOutAndChill.Repositories
         public bool AddSchedule(AddScheduleDTO addSchedule)
         {
             using var db = new SqlConnection(_connectionString);
+            //var sql = @"INSERT INTO [dbo].[Schedule]
+            //               (
+            //                [UserId]
+            //               ,[Status]
+            //               ,[Subject]
+            //               ,[Description]
+            //               ,[StartTime]
+            //               ,[EndTime]
+            //               ,[Location])
+            //         VALUES
+            //               (
+            //               @UserId
+            //               , @Status
+            //               , @Subject
+            //               , @Description
+            //               , @StartTime
+            //               , @EndTime
+            //               , @Location)";
+
             var sql = @"INSERT INTO [dbo].[Schedule]
                            (
-                            [UserId]
+                           [UserId]
                            ,[Status]
                            ,[Subject]
                            ,[Description]
                            ,[StartTime]
                            ,[EndTime]
-                           ,[Location])
+                           ,[Location]
+                           ,[firstName]
+                           ,[LastName]
+                           ,[profileImage])
                      VALUES
                            (
                            @UserId
-                           , @Status
-                           , @Subject
-                           , @Description
-                           , @StartTime
-                           , @EndTime
-                           , @Location)";
+                           ,@Status
+                           ,@Subject
+                           ,@Description
+                           ,@StartTime
+                           ,@Endtime
+                           ,@Location
+                           ,@firstName
+                           ,@LastName
+                           ,@profileImage)";
 
             return db.Execute(sql, addSchedule) == 1;
         }
@@ -41,7 +66,11 @@ namespace HangOutAndChill.Repositories
 
         public bool DeleteSchedule(Guid userId)
         {
-            throw new NotImplementedException();
+            using var db = new SqlConnection(_connectionString);
+            var sql = @"DELETE FROM [dbo].[Schedule]
+                            WHERE Id = @userId";
+
+            return db.Execute(sql, new { userId }) == 1;
         }
 
         public IEnumerable<ScheduleAppointment> GetSchedule()
@@ -52,20 +81,34 @@ namespace HangOutAndChill.Repositories
             var schedules = db.Query<ScheduleAppointment>(sql);
             return schedules;
         }
-
         public bool UpdateSchedule(Guid scheduleId, AddScheduleDTO updatedSchedule)
         {
             using var db = new SqlConnection(_connectionString);
+            //var sql = @"UPDATE [dbo].[Schedule]
+            //       SET
+            //          [UserId] = @UserId
+            //          ,[Status] = @Status
+            //          ,[Subject] = @Subject
+            //          ,[Description] = @Description
+            //          ,[StartTime] = @StartTime
+            //          ,[EndTime] = @EndTime
+            //          ,[Location] = @Location
+            //     WHERE Id = @Id";
+
+            //Remove the userId from the Update Sql Query
+            //[UserId] = @UserId
             var sql = @"UPDATE [dbo].[Schedule]
-                   SET
-                      [UserId] = @UserId
-                      ,[Status] = @Status
-                      ,[Subject] = @Subject
-                      ,[Description] = @Description
-                      ,[StartTime] = @StartTime
-                      ,[EndTime] = @EndTime
-                      ,[Location] = @Location
-                 WHERE Id = @Id";
+                           SET 
+                              [Status] = @Status
+                              ,[Subject] = @Subject
+                              ,[Description] = @Description
+                              ,[StartTime] = @StartTime
+                              ,[EndTime] = @EndTime
+                              ,[Location] = @Location
+                              ,[firstName] = @firstName
+                              ,[LastName] = @LastName
+                              ,[profileImage] = @profileImage
+                         WHERE Id = @Id";
             updatedSchedule.Id = scheduleId;
             return db.Execute(sql, updatedSchedule) == 1;
 

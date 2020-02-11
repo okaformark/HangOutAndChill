@@ -7,8 +7,6 @@ const getAllSchedule = () => new Promise((resolve, reject) => {
         .then(result => {
             let schedules = [];
             schedules = result.data;
-            console.log (result.data,'hu');
-            console.log (schedules,'hu');
             resolve(schedules);
         })
         .catch( err => console.error(reject, err));
