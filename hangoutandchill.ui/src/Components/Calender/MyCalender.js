@@ -16,9 +16,6 @@ import {
   Resize,
 } from '@syncfusion/ej2-react-schedule';
  import { DataManager, UrlAdaptor } from '@syncfusion/ej2-data';
-import userData from '../Helpers/UserData';
-import firebase from 'firebase/app'
-import 'firebase/auth';
 import UserData from '../Helpers/UserData';
 
 class MyCalendar extends React.Component {

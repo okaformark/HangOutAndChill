@@ -52,7 +52,7 @@ function SignUp({ history }) {
       await firebase.default
         .auth()
         .createUserWithEmailAndPassword(user.email, user.password);
-        history.push("/buttonAppBar/signIn");
+        history.push("/home");
     } catch (error) {
       alert(error)
     }
@@ -76,11 +76,6 @@ function SignUp({ history }) {
                         lastName: resp.data.LastName,
                     }
                     sessionStorage.setItem("userInfo", JSON.stringify(userSignUpObject));
-                  // userData.addUserIdtoScheduleTable(userSignUpObject)
-                  //   .then((resp)=>{
-                  //     console.error(resp,"patch")
-                  //   })
-                  //   .catch(err=>console.error("did not patch",err))
                 })
         })
         // })

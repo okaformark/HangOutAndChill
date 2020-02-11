@@ -135,7 +135,7 @@ const logOut = () =>{
           <Typography variant="h6" noWrap>
             Frienduler
           </Typography>
-          <Button color="inherit" onClick={logOut} to="/buttonAppBar">SignOut</Button>
+          <Button color="inherit" onClick={logOut} to="/">SignOut</Button>
         </Toolbar>
       </AppBar>
       <Drawer
